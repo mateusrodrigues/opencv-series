@@ -1,9 +1,11 @@
 #include <opencv2/opencv.hpp>
 
+#include "pixels.h"
+
 using namespace std;
 using namespace cv;
 
-int main()
+int pixels()
 {
     Mat image;
 
