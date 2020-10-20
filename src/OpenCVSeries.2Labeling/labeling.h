@@ -1,3 +1,4 @@
 #pragma once
 
-int labeling();
+int labeling_original();
+int labeling_enhanced();
