@@ -8,6 +8,7 @@ int main()
 {
     cout << "1) Labeling" << endl;
     cout << "2) Labeling enhanced" << endl;
+    cout << "3) Labeling colorful" << endl;
 
     cout << "Choose the example to run: ";
 
@@ -23,6 +24,9 @@ int main()
         break;
     case 2:
         result = labeling_enhanced();
+        break;
+    case 3:
+        result = labeling_colorful();
         break;
     default:
         break;

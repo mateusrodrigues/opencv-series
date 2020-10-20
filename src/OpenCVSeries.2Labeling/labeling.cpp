@@ -63,7 +63,6 @@ int labeling_original()
 int labeling_enhanced()
 {
     Mat bubbles;
-    Mat equalized;
 
     int width;
     int height;
@@ -186,4 +185,67 @@ int labeling_enhanced()
     waitKey();
 
     return 0;
+}
+
+int labeling_colorful()
+{
+    Mat bubbles;
+
+    int width;
+    int height;
+
+    int allbubbles = 0;
+
+    Point p;
+    bubbles = imread("Images/bubbles-colorful.png", IMREAD_COLOR);
+
+    if (!bubbles.data)
+    {
+        cout << "[ERROR] Could not open file bubbles.png" << endl;
+        return -1;
+    }
+
+    width = bubbles.cols;
+    height = bubbles.rows;
+
+    // Display starting image
+    imshow("Starting image", bubbles);
+
+#pragma region count_all_bubbles
+    // Knowing that there are more than 255 bubbles in the image, simply labeling
+    // them with shades of gray won't be enough since there are more bubbles than
+    // shades of gray available. In that case, we will label them with color shades
+    // starting from (1, 0, 0) up to (255, 255, 254).
+
+    uchar red = 1;
+    uchar green = 0;
+    uchar blue = 0;
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            auto color = bubbles.at<Vec3b>(Point(i, j));
+
+            if (color[0] == 255 && color[1] == 255 && color[2] == 255)
+            {
+                floodFill(bubbles, Point(i, j), Vec3b(blue, green, red));
+                allbubbles++;
+
+                // Increment color
+                red = (red + 1 > 255) ? 255 : red + 1;
+                green = (red == 255) ? green + 1 : green;
+                blue = (green == 255) ? blue + 1 : blue;
+                blue = (blue == 255) ? 255 : blue; // We have reached the color limits
+            }
+        }
+    }
+
+    imshow("Step 1: Label bubbles with colors", bubbles);
+#pragma endregion
+
+    cout << endl;
+    cout << "The image contains " << allbubbles << " bubbles";
+
+    waitKey();
 }
