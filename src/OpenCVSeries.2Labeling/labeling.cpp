@@ -59,7 +59,7 @@ int labeling_original()
     return 0;
 }
 
-int labeling_enhanced()
+int labeling_with_holes(cv::String filename)
 {
     Mat bubbles;
 
@@ -70,8 +70,10 @@ int labeling_enhanced()
     int solidbubbles = 0;
     int hollowbubbles = 0;
 
+    set<uchar> shades_used;
+
     Point p;
-    bubbles = imread("Images/bubbles.png", IMREAD_GRAYSCALE);
+    bubbles = imread(filename, IMREAD_GRAYSCALE);
 
     if (!bubbles.data)
     {
@@ -155,13 +157,25 @@ int labeling_enhanced()
     // Since black (0) shades are only found in internal parts of hollow bubbles,
     // the number of occurrences of these shades represents the number of total hollow bubbles.
     // We store that number in 'hollowbubbles' and paint the internal part of the bubble white (255).
+    // To consider a bubble has more than one hole, we need to store which bubble that hole belongs to by
+    // storing that bubble's shade (label) in a set that only contains shades (bubbles) whose holes have
+    // already been counted.
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
             if (bubbles.at<uchar>(i, j) == 0)
             {
-                hollowbubbles++;
+                // Found a hole, which bubbles does that belong to?
+                auto shade = bubbles.at<uchar>(i, j - 1);
+                auto pos = shades_used.find(shade);
+                if (pos == shades_used.end())
+                {
+                    // Shade not found, add it to set and increment hollow bubbles count.
+                    hollowbubbles++;
+                    shades_used.insert(shade);
+                }
+
                 p.x = j;
                 p.y = i;
                 floodFill(bubbles, p, 255);
