@@ -54,7 +54,6 @@ int labeling_original()
     equalizeHist(bubbles, equalized);
     imshow("bubbles", bubbles);
     imshow("equalized", equalized);
-    imwrite("Images/labeling.png", bubbles);
     waitKey();
 
     return 0;
@@ -181,7 +180,6 @@ int labeling_enhanced()
     cout << "\t" << solidbubbles << " solid bubbles" << endl;
     cout << "\t" << hollowbubbles << " hollow bubbles" << endl;
 
-    imwrite("Images/labeling.png", bubbles);
     waitKey();
 
     return 0;
