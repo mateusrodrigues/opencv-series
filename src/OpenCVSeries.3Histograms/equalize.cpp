@@ -8,8 +8,7 @@ int equalize()
 {
     VideoCapture cap;
 
-    vector<Mat> planes;
-    Mat histR, histG, histB;
+    Mat hist, histeq;
     int nbins = 64;
 
     float range[] = { 0, 255 };
@@ -35,51 +34,45 @@ int equalize()
     cout << "height  = " << height << endl;
 
     int histw = nbins, histh = nbins / 2;
-    Mat histImgR(histh, histw, CV_8UC3, Scalar(0, 0, 0));
-    Mat histImgG(histh, histw, CV_8UC3, Scalar(0, 0, 0));
-    Mat histImgB(histh, histw, CV_8UC3, Scalar(0, 0, 0));
+    Mat histImg(histh, histw, CV_8UC1, Scalar(0, 0, 0));
+    Mat histeqImg(histh, histw, CV_8UC1, Scalar(0, 0, 0));
 
-    Mat image;
+    Mat image, equalized;
     int key;
 
     while (1) 
     {
         cap >> image;
-        split(image, planes);
+        cvtColor(image, image, COLOR_BGR2GRAY);
+        equalizeHist(image, equalized);
 
-        calcHist(&planes[2], 1, 0, Mat(), histR, 1, &nbins, &histrange, uniform, acummulate);
-        calcHist(&planes[1], 1, 0, Mat(), histG, 1, &nbins, &histrange, uniform, acummulate);
-        calcHist(&planes[0], 1, 0, Mat(), histB, 1, &nbins, &histrange, uniform, acummulate);
+        calcHist(&image, 1, 0, Mat(), hist, 1, &nbins, &histrange, uniform, acummulate);
+        calcHist(&equalized, 1, 0, Mat(), histeq, 1, &nbins, &histrange, uniform, accumulate);
 
-        normalize(histR, histR, 0, histImgR.rows, NORM_MINMAX, -1, Mat());
-        normalize(histG, histG, 0, histImgG.rows, NORM_MINMAX, -1, Mat());
-        normalize(histB, histB, 0, histImgB.rows, NORM_MINMAX, -1, Mat());
+        normalize(hist, hist, 0, histImg.rows, NORM_MINMAX, -1, Mat());
+        normalize(histeq, histeq, 0, histeqImg.rows, NORM_MINMAX, -1, Mat());
 
-        histImgR.setTo(Scalar(0));
-        histImgG.setTo(Scalar(0));
-        histImgB.setTo(Scalar(0));
+        histImg.setTo(Scalar(0));
+        histeqImg.setTo(Scalar(0));
 
         for (int i = 0; i < nbins; i++) 
         {
-            line(histImgR,
+            line(histImg,
                 Point(i, histh),
-                Point(i, histh - cvRound(histR.at<float>(i))),
-                Scalar(0, 0, 255), 1, 8, 0);
-            line(histImgG,
+                Point(i, histh - cvRound(hist.at<float>(i))),
+                Scalar(255, 255, 255), 1, 8, 0);
+            line(histeqImg,
                 Point(i, histh),
-                Point(i, histh - cvRound(histG.at<float>(i))),
-                Scalar(0, 255, 0), 1, 8, 0);
-            line(histImgB,
-                Point(i, histh),
-                Point(i, histh - cvRound(histB.at<float>(i))),
-                Scalar(255, 0, 0), 1, 8, 0);
+                Point(i, histh - cvRound(histeq.at<float>(i))),
+                Scalar(255, 255, 255), 1, 8, 0);
         }
 
-        histImgR.copyTo(image(Rect(0, 0, nbins, histh)));
-        histImgG.copyTo(image(Rect(0, histh, nbins, histh)));
-        histImgB.copyTo(image(Rect(0, 2 * histh, nbins, histh)));
+        histImg.copyTo(image(Rect(0, 0, nbins, histh)));
+        histeqImg.copyTo(equalized(Rect(0, histh, nbins, histh)));
 
-        imshow("image", image);
+        imshow("Not Equalized", image);
+        imshow("Equalized", equalized);
+
         key = waitKey(30);
         if (key == 27) break;
     }
