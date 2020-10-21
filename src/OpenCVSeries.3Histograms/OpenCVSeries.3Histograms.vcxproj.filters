@@ -21,9 +21,15 @@
     <ClCompile Include="equalize.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="motion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="equalize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="motion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

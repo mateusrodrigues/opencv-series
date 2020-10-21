@@ -1,6 +1,8 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
+#include "equalize.h"
+
 using namespace std;
 using namespace cv;
 
