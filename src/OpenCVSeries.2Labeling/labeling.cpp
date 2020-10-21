@@ -72,7 +72,6 @@ int labeling_with_holes(cv::String filename)
 
     set<uchar> shades_used;
 
-    Point p;
     bubbles = imread(filename, IMREAD_GRAYSCALE);
 
     if (!bubbles.data)
@@ -93,30 +92,22 @@ int labeling_with_holes(cv::String filename)
     for (int i = 0; i < height; i++)
     {
         int j = 0;
-        p.x = j;
-        p.y = i;
-        if (bubbles.at<uchar>(i, j) == 255) floodFill(bubbles, p, 0);
+        if (bubbles.at<uchar>(Point(j, i)) == 255) floodFill(bubbles, Point(j, i), 0);
     }
     for (int i = 0; i < height; i++)
     {
         int j = width - 1;
-        p.x = j;
-        p.y = i;
-        if (bubbles.at<uchar>(i, j) == 255) floodFill(bubbles, p, 0);
+        if (bubbles.at<uchar>(Point(j, i)) == 255) floodFill(bubbles, Point(j, i), 0);
     }
     for (int j = 0; j < width; j++)
     {
         int i = 0;
-        p.x = j;
-        p.y = i;
-        if (bubbles.at<uchar>(i, j) == 255) floodFill(bubbles, p, 0);
+        if (bubbles.at<uchar>(Point(j, i)) == 255) floodFill(bubbles, Point(j, i), 0);
     }
     for (int j = 0; j < width; j++)
     {
         int i = height - 1;
-        p.x = j;
-        p.y = i;
-        if (bubbles.at<uchar>(i, j) == 255) floodFill(bubbles, p, 0);
+        if (bubbles.at<uchar>(Point(j, i)) == 255) floodFill(bubbles, Point(j, i), 0);
     }
 
     imshow("Step 1: Remove edge bubbles", bubbles);
@@ -134,9 +125,7 @@ int labeling_with_holes(cv::String filename)
             if (bubbles.at<uchar>(i, j) == 255)
             {
                 allbubbles++;
-                p.x = j;
-                p.y = i;
-                floodFill(bubbles, p, allbubbles);
+                floodFill(bubbles, Point(j, i), allbubbles);
             }
         }
     }
@@ -147,9 +136,7 @@ int labeling_with_holes(cv::String filename)
 #pragma region 3_paint_background_white
     // In order to find bubbles that are hollow, we need to paint the background white (255), which,
     // in turn, will only leave the internal parts of hollow bubbles with black (0) shades.
-    p.x = 0;
-    p.y = 0;
-    floodFill(bubbles, p, 255);
+    floodFill(bubbles, Point(0, 0), 255);
     imshow("Step 3: Paint background white", bubbles);
 #pragma endregion
 
@@ -176,9 +163,7 @@ int labeling_with_holes(cv::String filename)
                     shades_used.insert(shade);
                 }
 
-                p.x = j;
-                p.y = i;
-                floodFill(bubbles, p, 255);
+                floodFill(bubbles, Point(j, i), 255);
             }
         }
     }
@@ -237,11 +222,11 @@ int labeling_colorful()
     {
         for (int j = 0; j < width; j++)
         {
-            auto color = bubbles.at<Vec3b>(Point(i, j));
+            auto color = bubbles.at<Vec3b>(Point(j, i));
 
             if (color[0] == 255 && color[1] == 255 && color[2] == 255)
             {
-                floodFill(bubbles, Point(i, j), Vec3b(blue, green, red));
+                floodFill(bubbles, Point(j, i), Vec3b(blue, green, red));
                 allbubbles++;
 
                 // Increment color
@@ -260,4 +245,6 @@ int labeling_colorful()
     cout << "The image contains " << allbubbles << " bubbles";
 
     waitKey();
+
+    return 0;
 }
