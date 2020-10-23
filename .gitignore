@@ -338,3 +338,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/src/OpenCVSeries.5SpatialFilterOne/Images/output.jpg
