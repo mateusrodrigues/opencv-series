@@ -14,7 +14,7 @@ int motion_detector()
     Mat histR1, histR2;
     int nbins = 64;
 
-    float range[] = { 0, 255 };
+    float range[] = { 0, 256 };
     const float* histrange = { range };
 
     bool uniform = true;
@@ -39,7 +39,6 @@ int motion_detector()
     int histw = nbins, histh = nbins / 2;
     Mat histImgR(histh, histw, CV_8UC3, Scalar(0, 0, 0));
 
-    Mat previous;
     Mat image;
     int key;
 
@@ -67,7 +66,7 @@ int motion_detector()
 
         histImgR.copyTo(image(Rect(0, 0, nbins, histh)));
 
-        double comparison = compareHist(histR1, histR2, 4);
+        double comparison = compareHist(histR1, histR2, HISTCMP_CHISQR_ALT);
         cout << comparison << endl;
 
         if (comparison > 60)

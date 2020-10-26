@@ -13,11 +13,11 @@ int equalize()
     Mat hist, histeq;
     int nbins = 64;
 
-    float range[] = { 0, 255 };
+    float range[] = { 0, 256 };
     const float* histrange = { range };
 
     bool uniform = true;
-    bool acummulate = false;
+    bool accumulate = false;
 
     cap.open(0);
 
@@ -36,8 +36,8 @@ int equalize()
     cout << "height  = " << height << endl;
 
     int histw = nbins, histh = nbins / 2;
-    Mat histImg(histh, histw, CV_8UC1, Scalar(0, 0, 0));
-    Mat histeqImg(histh, histw, CV_8UC1, Scalar(0, 0, 0));
+    Mat histDisplayImg(histh, histw, CV_8UC1, Scalar(0, 0, 0));
+    Mat histeqDisplayImg(histh, histw, CV_8UC1, Scalar(0, 0, 0));
 
     Mat image, equalized;
     int key;
@@ -48,29 +48,29 @@ int equalize()
         cvtColor(image, image, COLOR_BGR2GRAY);
         equalizeHist(image, equalized);
 
-        calcHist(&image, 1, 0, Mat(), hist, 1, &nbins, &histrange, uniform, acummulate);
+        calcHist(&image, 1, 0, Mat(), hist, 1, &nbins, &histrange, uniform, accumulate);
         calcHist(&equalized, 1, 0, Mat(), histeq, 1, &nbins, &histrange, uniform, accumulate);
 
-        normalize(hist, hist, 0, histImg.rows, NORM_MINMAX, -1, Mat());
-        normalize(histeq, histeq, 0, histeqImg.rows, NORM_MINMAX, -1, Mat());
+        normalize(hist, hist, 0, histDisplayImg.rows, NORM_MINMAX, -1, Mat());
+        normalize(histeq, histeq, 0, histeqDisplayImg.rows, NORM_MINMAX, -1, Mat());
 
-        histImg.setTo(Scalar(0));
-        histeqImg.setTo(Scalar(0));
+        histDisplayImg.setTo(Scalar(0));
+        histeqDisplayImg.setTo(Scalar(0));
 
         for (int i = 0; i < nbins; i++) 
         {
-            line(histImg,
+            line(histDisplayImg,
                 Point(i, histh),
                 Point(i, histh - cvRound(hist.at<float>(i))),
                 Scalar(255, 255, 255), 1, 8, 0);
-            line(histeqImg,
+            line(histeqDisplayImg,
                 Point(i, histh),
                 Point(i, histh - cvRound(histeq.at<float>(i))),
                 Scalar(255, 255, 255), 1, 8, 0);
         }
 
-        histImg.copyTo(image(Rect(0, 0, nbins, histh)));
-        histeqImg.copyTo(equalized(Rect(0, histh, nbins, histh)));
+        histDisplayImg.copyTo(image(Rect(0, 0, nbins, histh)));
+        histeqDisplayImg.copyTo(equalized(Rect(0, 0, nbins, histh)));
 
         imshow("Not Equalized", image);
         imshow("Equalized", equalized);
