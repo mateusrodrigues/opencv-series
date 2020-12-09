@@ -11,7 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCVSeries.3Histograms", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCVSeries.4SpatialFilterOne", "src\OpenCVSeries.4SpatialFilterOne\OpenCVSeries.4SpatialFilterOne.vcxproj", "{5560E701-B21E-4EC4-AEDD-D361F4D902CF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCVSeries.5SpatialFilterOne", "src\OpenCVSeries.5SpatialFilterOne\OpenCVSeries.5SpatialFilterOne.vcxproj", "{6849B83A-7269-4521-8F0A-93799A092E1C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCVSeries.5SpatialFilterTwo", "src\OpenCVSeries.5SpatialFilterTwo\OpenCVSeries.5SpatialFilterTwo.vcxproj", "{6849B83A-7269-4521-8F0A-93799A092E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

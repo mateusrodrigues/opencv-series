@@ -24,6 +24,7 @@
     <ProjectGuid>{6849b83a-7269-4521-8f0a-93799a092e1c}</ProjectGuid>
     <RootNamespace>OpenCVSeries5SpatialFilterOne</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>OpenCVSeries.5SpatialFilterTwo</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
